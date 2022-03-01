@@ -15,6 +15,8 @@
                 label="Character name*"
                 required
                 v-model="charName"
+                @keyup.enter="addCharacter"
+                autofocus
               ></v-text-field>
             </v-col>
           </v-row>
@@ -30,7 +32,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <v-btn size="small" class="mr-4 ml-5" color="primary" plain @click.stop="dialog = true">
+  <v-btn size="small" class="mr-4 ml-5" color="primary" plain @click.stop="dialog = true;">
     <v-icon left icon="mdi-plus"></v-icon>
     <span>Add character</span>
   </v-btn>
@@ -38,6 +40,7 @@
 
 <script>
 import { useCharacterStore } from "../store/character";
+
 
 export default {
   setup() {
@@ -50,13 +53,13 @@ export default {
   }),
   methods: {
     addCharacter() {
-      console.log(this.characterStore.chars);
-      // if (this.characterStore.chars.any(n => n.name === this.charName)) {
-      //   this.dialog = false;
-      //   return; 
-      // }
+      if (this.characterStore.chars.some(n => n.name === this.charName)) {
+        this.dialog = false;
+        return; 
+      }
       this.characterStore.addCharacter(this.charName);
       this.dialog = false;
+      this.charName = null;
     }
   }
 };

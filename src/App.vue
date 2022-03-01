@@ -6,7 +6,7 @@
         <character-grid />
       </v-container>
     </v-main>
-    <v-footer class="d-flex justify-center" app><img src="./assets/xdders.gif"></v-footer>
+    <v-footer v-if="characterStore.chars.length > 0" class="d-flex justify-center" app><img src="./assets/xdders.gif"></v-footer>
   </v-app>
 </template>
 
@@ -14,6 +14,7 @@
 import { ref } from 'vue';
 import Navbar from './components/Navbar.vue';
 import CharacterGrid from './components/CharacterGrid.vue';
+import { useCharacterStore } from './store/character';
 
 export default {
   components: {
@@ -23,9 +24,11 @@ export default {
 
   setup() {
     const theme = ref('dark');
+    const characterStore = useCharacterStore();
 
     return {
       theme,
+      characterStore,
       toggleTheme: () =>
         (theme.value = theme.value === 'light' ? 'dark' : 'light'),
     };

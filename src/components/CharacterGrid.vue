@@ -1,6 +1,20 @@
 <template>
-  <div class="d-flex justify-center">
-    <div class="character-grid" :style="{ gridTemplateColumns: '150px ' + gridSize }">
+  <div v-if="charactersNumber === 0" class="d-flex justify-center">
+    <v-alert
+      color="deep-orange"
+      icon="mdi-fire"
+      title="No characters found"
+      variant="outlined"
+      class="no-character-alert"
+    >
+    Click on the navbar to add one (or more!)
+    </v-alert>
+  </div>
+  <div v-else class="d-flex justify-center">
+    <div
+      class="character-grid"
+      :style="{ gridTemplateColumns: '150px ' + gridSize }"
+    >
       <div></div>
       <div class="char-header" v-for="char in characters" :key="char.name">
         <span class="char-name" :title="char.name">{{ char.name }}</span>
@@ -17,7 +31,7 @@
       <template v-for="element in daily" :key="element">
         <div class="row-wrapper content-wrapper">
           <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)">
+            <img class="content-icon mr-2" :src="getIcon(element)" />
             {{ getContentName(element) }}
           </div>
           <div v-for="char in characters" :key="char.name">
@@ -35,7 +49,7 @@
       <template v-for="element in dailyAccount" :key="element">
         <div class="row-wrapper content-wrapper">
           <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)">
+            <img class="content-icon mr-2" :src="getIcon(element)" />
             {{ getContentName(element) }}
           </div>
           <div class="affinity-row d-flex justify-center">
@@ -49,43 +63,55 @@
           </div>
         </div>
       </template>
-        <div class="row-wrapper content-wrapper">
-          <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon('affinitysong')">
-            {{ getContentName('affinitysong') }}
-          </div>
+      <div class="row-wrapper content-wrapper">
+        <div class="content-header">
+          <img class="content-icon mr-2" :src="getIcon('affinitysong')" />
+          {{ getContentName("affinitysong") }}
+        </div>
         <div class="affinity-row d-flex justify-center">
           <v-checkbox
-            v-for="(_, index) in 6" :key="index"
+            v-for="(_, index) in 6"
+            :key="index"
             v-model="characterStore.account.affinitySong"
             color="success"
             :value="'song' + index"
             hide-details
-            @click="characterStore.toggleAccountContent('affinitySong', 'song' + index)"
+            @click="
+              characterStore.toggleAccountContent(
+                'affinitySong',
+                'song' + index
+              )
+            "
           />
         </div>
-          </div>
-        <div class="row-wrapper content-wrapper">
-          <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon('affinityemote')">
-            {{ getContentName('affinityemote') }}
-          </div>
+      </div>
+      <div class="row-wrapper content-wrapper">
+        <div class="content-header">
+          <img class="content-icon mr-2" :src="getIcon('affinityemote')" />
+          {{ getContentName("affinityemote") }}
+        </div>
         <div class="affinity-row d-flex justify-center">
           <v-checkbox
-            v-for="(_, index) in 6" :key="index"
+            v-for="(_, index) in 6"
+            :key="index"
             v-model="characterStore.account.affinityEmote"
             color="success"
             :value="'emote-' + index"
             hide-details
-            @click="characterStore.toggleAccountContent('affinityEmote', 'emote-' + index)"
+            @click="
+              characterStore.toggleAccountContent(
+                'affinityEmote',
+                'emote-' + index
+              )
+            "
           />
         </div>
-          </div>
+      </div>
       <div class="full-row">WEEKLY</div>
       <template v-for="element in weekly" :key="element">
         <div class="row-wrapper content-wrapper">
           <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)">
+            <img class="content-icon mr-2" :src="getIcon(element)" />
             {{ getContentName(element) }}
           </div>
           <div v-for="char in characters" :key="char.name">
@@ -94,7 +120,9 @@
               color="success"
               :value="element"
               hide-details
-              @click="characterStore.toggleContent(char.name, 'weekly', element)"
+              @click="
+                characterStore.toggleContent(char.name, 'weekly', element)
+              "
             />
           </div>
         </div>
@@ -103,7 +131,7 @@
       <template v-for="element in weeklyAccount" :key="element">
         <div class="row-wrapper content-wrapper">
           <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)">
+            <img class="content-icon mr-2" :src="getIcon(element)" />
             {{ getContentName(element) }}
           </div>
           <div class="affinity-row d-flex justify-center">
@@ -125,19 +153,19 @@
 import { useCharacterStore } from "../store/character";
 
 const map = {
-  'unad': 'Una Daily',
-  'chaos': 'Chaos',
-  'guardian': 'Guardian Raid',
-  'unaw': 'Una Weekly',
-  'affinitysong': 'Affinity Song',
-  'affinityemote': 'Affinity Emote',
-  'guilds': 'Guild Support',
-  'guildr': 'Guild Research',
-  'ghostship': 'Ghost Ship',
-  'island': 'Adventure Island',
-  'fieldboss': 'Field Boss',
-  'chaosgate': 'Chaos Gate',
-}
+  unad: "Una Daily",
+  chaos: "Chaos",
+  guardian: "Guardian Raid",
+  unaw: "Una Weekly",
+  affinitysong: "Affinity Song",
+  affinityemote: "Affinity Emote",
+  guilds: "Guild Support",
+  guildr: "Guild Research",
+  ghostship: "Ghost Ship",
+  island: "Adventure Island",
+  fieldboss: "Field Boss",
+  chaosgate: "Chaos Gate",
+};
 
 export default {
   data: () => ({
@@ -152,23 +180,10 @@ export default {
       "guilds",
       "guildr",
     ],
-    dailyAccount: [
-      "island",
-      "fieldboss",
-      "chaosgate",
-    ],
-    affinity: [
-      "affinitysong",
-      "affinityemote",
-    ],
-    weekly: [
-      "unaw-1",
-      "unaw-2",
-      "unaw-3",
-    ],
-    weeklyAccount: [
-      'ghostship'
-    ]
+    dailyAccount: ["island", "fieldboss", "chaosgate"],
+    affinity: ["affinitysong", "affinityemote"],
+    weekly: ["unaw-1", "unaw-2", "unaw-3"],
+    weeklyAccount: ["ghostship"],
   }),
   setup() {
     const characterStore = useCharacterStore();
@@ -176,22 +191,22 @@ export default {
   },
   methods: {
     getIcon(element) {
-      const name = element.split('-')[0];
-      return new URL(`../assets/${name}.png`, import.meta.url)
+      const name = element.split("-")[0];
+      return new URL(`../assets/${name}.png`, import.meta.url);
     },
     dailyToggle(charName, content) {
       this.characterStore.toggleDaily(charName, content);
     },
     getContentName(content) {
-      if (content.indexOf('-') !== -1) {
-        const parts = content.split('-');
+      if (content.indexOf("-") !== -1) {
+        const parts = content.split("-");
         const name = parts[0];
         const number = parts[1];
         return `${map[name]} #${number}`;
       } else {
         return `${map[content]}`;
       }
-    }
+    },
   },
   computed: {
     characters() {
@@ -208,7 +223,7 @@ export default {
       } else {
         return `repeat(${charNumber}, 200px)`;
       }
-    }
+    },
   },
 };
 </script>
