@@ -1,13 +1,12 @@
 <template>
-  <v-app :theme="theme">
-    <v-layout>
-      <Navbar @toggle-theme="toggleTheme" />
-      <v-main>
-        <v-container>
-          <character-grid />
-        </v-container>
-      </v-main>
-    </v-layout>
+  <v-app id="app" app :theme="theme">
+    <Navbar @toggle-theme="toggleTheme" />
+    <v-main app>
+      <v-container>
+        <character-grid />
+      </v-container>
+    </v-main>
+    <v-footer class="d-flex justify-center" app><img src="./assets/xdders.gif"></v-footer>
   </v-app>
 </template>
 
@@ -35,9 +34,8 @@ export default {
 </script>
 
 <style lang="scss">
-html,
-body,
-#app {
+.v-application {
+  min-height: 100vh;
   height: 100%;
 }
 </style>

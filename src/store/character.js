@@ -8,36 +8,53 @@ export const useCharacterStore = defineStore('characters', {
           name: 'Cinko',
           class: 'Gunslinger',
           daily: ['unad-1', 'unad-2', false, 'guardian-1'],
+          weekly: [],
         },
         {
           name: 'Cinka',
           class: 'Bard',
           daily: ['guardian-2', false, false],
+          weekly: [],
         },
         {
           name: 'Cinkowska',
           class: 'Soulfist',
           daily: [false, false, false],
+          weekly: [],
         },
         {
           name: 'Cinkos',
           class: 'Deathblade',
           daily: [false, false, false],
+          weekly: [],
         },
       ]),
+      account: useStorage('account', {
+        daily: [],
+        weekly: [],
+        affinitySong: [],
+        affinityEmote: [],
+      })
     }
   ),
   actions: {
-    toggleDaily(charName, content) {
-      const char = this.chars.find(n => n.name === charName);
+    toggleContent(charName, type, content) {
+      const char = this.chars.find(n => n.name.toLowerCase() === charName.toLowerCase());
       if (!char) {
         return;
       }
 
-      if (char.daily.filter(n => n === content)) {
-        char.daily = char.daily.filter(n => n !== content);
+      if (char[type].filter(n => n === content)) {
+        char[type] = char[type].filter(n => n !== content);
       } else {
-        char.daily.push(content);
+        char[type].push(content);
+      }
+    },
+    toggleAccountContent(type, content) {
+      if (this.account[type].filter(n => n === content)) {
+        this.account[type] = this.account[type].filter(n => n !== content);
+      } else {
+        this.account[type].push(content);
       }
     },
     addCharacter(charName) {

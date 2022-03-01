@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar density="compact" app>
+  <v-app-bar density="compact" app hidden-on-scroll>
     <v-app-bar-title>ArkList</v-app-bar-title>
 
     <v-spacer></v-spacer>
@@ -32,3 +32,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.v-app-bar {
+  position: absolute !important;
+}
+</style>

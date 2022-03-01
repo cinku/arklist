@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center">
-    <div class="character-grid" :style="{ gridTemplateColumns: '150px repeat(' + charactersNumber + ', 200px)' }">
+    <div class="character-grid" :style="{ gridTemplateColumns: '150px ' + gridSize }">
       <div></div>
       <div class="char-header" v-for="char in characters" :key="char.name">
         <span class="char-name" :title="char.name">{{ char.name }}</span>
@@ -13,7 +13,8 @@
         >
         </v-icon>
       </div>
-      <template v-for="element in content" :key="element">
+      <div class="full-row">DAILY</div>
+      <template v-for="element in daily" :key="element">
         <div class="row-wrapper content-wrapper">
           <div class="content-header">
             <img class="content-icon mr-2" :src="getIcon(element)">
@@ -25,7 +26,93 @@
               color="success"
               :value="element"
               hide-details
-              @click="dailyToggle(char.name, element)"
+              @click="characterStore.toggleContent(char.name, 'daily', element)"
+            />
+          </div>
+        </div>
+      </template>
+      <div class="full-row">DAILY ACCOUNT</div>
+      <template v-for="element in dailyAccount" :key="element">
+        <div class="row-wrapper content-wrapper">
+          <div class="content-header">
+            <img class="content-icon mr-2" :src="getIcon(element)">
+            {{ getContentName(element) }}
+          </div>
+          <div class="affinity-row d-flex justify-center">
+            <v-checkbox
+              v-model="characterStore.account.daily"
+              color="success"
+              :value="element"
+              hide-details
+              @click="characterStore.toggleAccountContent('daily', element)"
+            />
+          </div>
+        </div>
+      </template>
+        <div class="row-wrapper content-wrapper">
+          <div class="content-header">
+            <img class="content-icon mr-2" :src="getIcon('affinitysong')">
+            {{ getContentName('affinitysong') }}
+          </div>
+        <div class="affinity-row d-flex justify-center">
+          <v-checkbox
+            v-for="(_, index) in 6" :key="index"
+            v-model="characterStore.account.affinitySong"
+            color="success"
+            :value="'song' + index"
+            hide-details
+            @click="characterStore.toggleAccountContent('affinitySong', 'song' + index)"
+          />
+        </div>
+          </div>
+        <div class="row-wrapper content-wrapper">
+          <div class="content-header">
+            <img class="content-icon mr-2" :src="getIcon('affinityemote')">
+            {{ getContentName('affinityemote') }}
+          </div>
+        <div class="affinity-row d-flex justify-center">
+          <v-checkbox
+            v-for="(_, index) in 6" :key="index"
+            v-model="characterStore.account.affinityEmote"
+            color="success"
+            :value="'emote-' + index"
+            hide-details
+            @click="characterStore.toggleAccountContent('affinityEmote', 'emote-' + index)"
+          />
+        </div>
+          </div>
+      <div class="full-row">WEEKLY</div>
+      <template v-for="element in weekly" :key="element">
+        <div class="row-wrapper content-wrapper">
+          <div class="content-header">
+            <img class="content-icon mr-2" :src="getIcon(element)">
+            {{ getContentName(element) }}
+          </div>
+          <div v-for="char in characters" :key="char.name">
+            <v-checkbox
+              v-model="char.weekly"
+              color="success"
+              :value="element"
+              hide-details
+              @click="characterStore.toggleContent(char.name, 'weekly', element)"
+            />
+          </div>
+        </div>
+      </template>
+      <div class="full-row">WEEKLY ACCOUNT</div>
+      <template v-for="element in weeklyAccount" :key="element">
+        <div class="row-wrapper content-wrapper">
+          <div class="content-header">
+            <img class="content-icon mr-2" :src="getIcon(element)">
+            {{ getContentName(element) }}
+          </div>
+          <div class="affinity-row d-flex justify-center">
+            <v-checkbox
+              v-model="characterStore.account.weekly"
+              color="success"
+              :value="element"
+              hide-details
+              @click="characterStore.toggleAccountContent('weekly', element)"
             />
           </div>
         </div>
@@ -41,11 +128,20 @@ const map = {
   'unad': 'Una Daily',
   'chaos': 'Chaos',
   'guardian': 'Guardian Raid',
+  'unaw': 'Una Weekly',
+  'affinitysong': 'Affinity Song',
+  'affinityemote': 'Affinity Emote',
+  'guilds': 'Guild Support',
+  'guildr': 'Guild Research',
+  'ghostship': 'Ghost Ship',
+  'island': 'Adventure Island',
+  'fieldboss': 'Field Boss',
+  'chaosgate': 'Chaos Gate',
 }
 
 export default {
   data: () => ({
-    content: [
+    daily: [
       "unad-1",
       "unad-2",
       "unad-3",
@@ -53,7 +149,26 @@ export default {
       "chaos-2",
       "guardian-1",
       "guardian-2",
+      "guilds",
+      "guildr",
     ],
+    dailyAccount: [
+      "island",
+      "fieldboss",
+      "chaosgate",
+    ],
+    affinity: [
+      "affinitysong",
+      "affinityemote",
+    ],
+    weekly: [
+      "unaw-1",
+      "unaw-2",
+      "unaw-3",
+    ],
+    weeklyAccount: [
+      'ghostship'
+    ]
   }),
   setup() {
     const characterStore = useCharacterStore();
@@ -68,10 +183,14 @@ export default {
       this.characterStore.toggleDaily(charName, content);
     },
     getContentName(content) {
-      const parts = content.split('-');
-      const name = parts[0];
-      const number = parts[1];
-      return `${map[name]} #${number}`;
+      if (content.indexOf('-') !== -1) {
+        const parts = content.split('-');
+        const name = parts[0];
+        const number = parts[1];
+        return `${map[name]} #${number}`;
+      } else {
+        return `${map[content]}`;
+      }
     }
   },
   computed: {
@@ -80,6 +199,15 @@ export default {
     },
     charactersNumber() {
       return this.characterStore.chars.length;
+    },
+    gridSize() {
+      const charNumber = this.characterStore.chars.length;
+      if (charNumber < 3) {
+        const size = 3 - (charNumber % 3);
+        return `repeat(${charNumber}, ${size * 200}px)`;
+      } else {
+        return `repeat(${charNumber}, 200px)`;
+      }
     }
   },
 };
@@ -89,9 +217,6 @@ export default {
 .character-grid {
   display: grid;
 }
-// div {
-//   border: 1px solid red;
-// }
 .row-wrapper {
   display: contents;
   &:hover > div {
@@ -132,15 +257,27 @@ export default {
   right: 0;
   cursor: pointer;
 }
+.full-row {
+  grid-column: 1/-1;
+}
+.affinity-row {
+  grid-column: 2 / -1;
+}
 </style>
 
 <style lang="scss">
-.v-label {
+.character-grid .v-label {
   display: none !important;
   width: 0 !important;
 }
 
 .v-selection-control {
   justify-content: center;
+}
+
+.affinity-row {
+  & .v-input {
+    flex: 0 0 auto;
+  }
 }
 </style>
