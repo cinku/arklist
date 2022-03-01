@@ -7,13 +7,13 @@
       variant="outlined"
       class="no-character-alert"
     >
-    Click on the navbar to add one (or more!)
+      Click on the navbar to add one (or more!)
     </v-alert>
   </div>
   <div v-else class="d-flex justify-center">
     <div
       class="character-grid"
-      :style="{ gridTemplateColumns: '150px ' + gridSize }"
+      :style="{ gridTemplateColumns: '200px ' + gridSize }"
     >
       <div></div>
       <div class="char-header" v-for="char in characters" :key="char.name">
@@ -27,13 +27,13 @@
         >
         </v-icon>
       </div>
-      <div class="full-row">DAILY</div>
+      <div class="full-row full-row--daily">DAILY</div>
       <template v-for="element in daily" :key="element">
-        <div class="row-wrapper content-wrapper">
-          <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)" />
-            {{ getContentName(element) }}
-          </div>
+        <div class="content-header content-header--daily px-5">
+          <img class="content-icon mr-2" :src="getIcon(element)" />
+          {{ getContentName(element) }}
+        </div>
+        <div class="row-wrapper row-wrapper--daily">
           <div v-for="char in characters" :key="char.name">
             <v-checkbox
               v-model="char.daily"
@@ -45,13 +45,13 @@
           </div>
         </div>
       </template>
-      <div class="full-row">DAILY ACCOUNT</div>
+      <div class="full-row full-row--daily">DAILY ACCOUNT</div>
       <template v-for="element in dailyAccount" :key="element">
-        <div class="row-wrapper content-wrapper">
-          <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)" />
-            {{ getContentName(element) }}
-          </div>
+        <div class="content-header content-header--daily px-5">
+          <img class="content-icon mr-2" :src="getIcon(element)" />
+          {{ getContentName(element) }}
+        </div>
+        <div class="row-wrapper row-wrapper--daily">
           <div class="affinity-row d-flex justify-center">
             <v-checkbox
               v-model="characterStore.account.daily"
@@ -63,11 +63,11 @@
           </div>
         </div>
       </template>
-      <div class="row-wrapper content-wrapper">
-        <div class="content-header">
-          <img class="content-icon mr-2" :src="getIcon('affinitysong')" />
-          {{ getContentName("affinitysong") }}
-        </div>
+      <div class="content-header content-header--daily px-5">
+        <img class="content-icon mr-2" :src="getIcon('affinitysong')" />
+        {{ getContentName("affinitysong") }}
+      </div>
+      <div class="row-wrapper row-wrapper--daily">
         <div class="affinity-row d-flex justify-center">
           <v-checkbox
             v-for="(_, index) in 6"
@@ -85,11 +85,11 @@
           />
         </div>
       </div>
-      <div class="row-wrapper content-wrapper">
-        <div class="content-header">
-          <img class="content-icon mr-2" :src="getIcon('affinityemote')" />
-          {{ getContentName("affinityemote") }}
-        </div>
+      <div class="content-header content-header--daily px-5">
+        <img class="content-icon mr-2" :src="getIcon('affinityemote')" />
+        {{ getContentName("affinityemote") }}
+      </div>
+      <div class="row-wrapper row-wrapper--daily">
         <div class="affinity-row d-flex justify-center">
           <v-checkbox
             v-for="(_, index) in 6"
@@ -107,13 +107,13 @@
           />
         </div>
       </div>
-      <div class="full-row">WEEKLY</div>
+      <div class="full-row full-row--weekly">WEEKLY</div>
       <template v-for="element in weekly" :key="element">
-        <div class="row-wrapper content-wrapper">
-          <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)" />
-            {{ getContentName(element) }}
-          </div>
+        <div class="content-header content-header--weekly">
+          <img class="content-icon mr-2" :src="getIcon(element)" />
+          {{ getContentName(element) }}
+        </div>
+        <div class="row-wrapper row-wrapper--weekly">
           <div v-for="char in characters" :key="char.name">
             <v-checkbox
               v-model="char.weekly"
@@ -127,13 +127,13 @@
           </div>
         </div>
       </template>
-      <div class="full-row">WEEKLY ACCOUNT</div>
+      <div class="full-row full-row--weekly">WEEKLY ACCOUNT</div>
       <template v-for="element in weeklyAccount" :key="element">
-        <div class="row-wrapper content-wrapper">
-          <div class="content-header">
-            <img class="content-icon mr-2" :src="getIcon(element)" />
-            {{ getContentName(element) }}
-          </div>
+        <div class="content-header content-header--weekly">
+          <img class="content-icon mr-2" :src="getIcon(element)" />
+          {{ getContentName(element) }}
+        </div>
+        <div class="row-wrapper row-wrapper--weekly">
           <div class="affinity-row d-flex justify-center">
             <v-checkbox
               v-model="characterStore.account.weekly"
@@ -234,19 +234,22 @@ export default {
 }
 .row-wrapper {
   display: contents;
-  &:hover > div {
-    background: orange;
+  &--daily:hover > div {
+    background: darken(#93c47d, 20%);
   }
-}
-.content-wrapper {
-  display: contents;
-  & > div {
-    background: #93c47d;
+  &--weekly:hover > div {
+    background: darken(#6fa8dc, 20%);
   }
 }
 .content-header {
   display: flex;
   align-items: center;
+  &--daily {
+    background: #93c47d;
+  }
+  &--weekly {
+    background: #6fa8dc;
+  }
 }
 .content-icon {
   width: 32px;
@@ -273,7 +276,17 @@ export default {
   cursor: pointer;
 }
 .full-row {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
   grid-column: 1/-1;
+
+  &--daily {
+    background: #6aa84f;
+  }
+  &--weekly {
+    background: #3d85c6;
+  }
 }
 .affinity-row {
   grid-column: 2 / -1;

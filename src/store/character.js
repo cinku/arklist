@@ -3,32 +3,7 @@ import { useStorage } from "@vueuse/core";
 
 export const useCharacterStore = defineStore("characters", {
   state: () => ({
-    chars: useStorage("chars", [
-      {
-        name: "Cinko",
-        class: "Gunslinger",
-        daily: ["unad-1", "unad-2", false, "guardian-1"],
-        weekly: [],
-      },
-      {
-        name: "Cinka",
-        class: "Bard",
-        daily: ["guardian-2", false, false],
-        weekly: [],
-      },
-      {
-        name: "Cinkowska",
-        class: "Soulfist",
-        daily: [false, false, false],
-        weekly: [],
-      },
-      {
-        name: "Cinkos",
-        class: "Deathblade",
-        daily: [false, false, false],
-        weekly: [],
-      },
-    ]),
+    chars: useStorage("chars", []),
     account: useStorage("account", {
       daily: [],
       weekly: [],
@@ -63,6 +38,7 @@ export const useCharacterStore = defineStore("characters", {
         name: charName,
         class: "Gunslinger",
         daily: [],
+        weekly: [],
       });
     },
     removeCharacter(charName) {
