@@ -262,6 +262,11 @@ export default {
   flex-direction: column;
   position: relative;
   height: 45px;
+  position: sticky;
+  top: 0;
+  background: #121212;
+  z-index: 3;
+  border: solid 1px #676767;
 }
 .char-name {
   max-width: 90px;
