@@ -109,7 +109,7 @@
       </div>
       <div class="full-row full-row--weekly">WEEKLY</div>
       <template v-for="element in weekly" :key="element">
-        <div class="content-header content-header--weekly">
+        <div class="content-header content-header--weekly px-5">
           <img class="content-icon mr-2" :src="getIcon(element)" />
           {{ getContentName(element) }}
         </div>
@@ -129,7 +129,7 @@
       </template>
       <div class="full-row full-row--weekly">WEEKLY ACCOUNT</div>
       <template v-for="element in weeklyAccount" :key="element">
-        <div class="content-header content-header--weekly">
+        <div class="content-header content-header--weekly px-5">
           <img class="content-icon mr-2" :src="getIcon(element)" />
           {{ getContentName(element) }}
         </div>
