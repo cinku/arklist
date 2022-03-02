@@ -15,7 +15,10 @@
       class="character-grid"
       :style="{ gridTemplateColumns: '200px ' + gridSize }"
     >
-      <div></div>
+      <div class="d-flex justify-center align-center">
+        <reset-daily v-if="characterStore.chars.length > 0" />
+        <reset-weekly v-if="characterStore.chars.length > 0" />
+      </div>
       <div class="char-header" v-for="char in characters" :key="char.name">
         <span class="char-name" :title="char.name">{{ char.name }}</span>
         <v-icon
@@ -117,7 +120,7 @@
           <div v-for="char in characters" :key="char.name">
             <v-checkbox
               v-model="char.weekly"
-              color="success"
+              color="info"
               :value="element"
               hide-details
               @click="
@@ -137,7 +140,7 @@
           <div class="affinity-row d-flex justify-center">
             <v-checkbox
               v-model="characterStore.account.weekly"
-              color="success"
+              color="info"
               :value="element"
               hide-details
               @click="characterStore.toggleAccountContent('weekly', element)"
@@ -151,6 +154,8 @@
 
 <script>
 import { useCharacterStore } from "../store/character";
+import ResetDaily from './ResetDaily.vue';
+import ResetWeekly from './ResetWeekly.vue';
 
 const map = {
   unad: "Una Daily",
@@ -168,6 +173,10 @@ const map = {
 };
 
 export default {
+  components: {
+    ResetDaily,
+    ResetWeekly,
+  },
   data: () => ({
     daily: [
       "unad-1",
@@ -235,21 +244,35 @@ export default {
 }
 .row-wrapper {
   display: contents;
-  &--daily:hover > div {
-    background: darken(#93c47d, 20%);
+  &--daily {
+    & > div {
+      border-bottom: 1px solid rgba(106, 168, 79, 0.3);
+      border-right: 1px solid rgba(106, 168, 79, 0.3);
+    }
   }
-  &--weekly:hover > div {
-    background: darken(#6fa8dc, 20%);
+  &--weekly {
+    & > div {
+      border-bottom: 1px solid rgba(61, 133, 198, 0.3);
+      border-right: 1px solid rgba(61, 133, 198, 0.3);
+    }
   }
+  // &--daily:hover > div {
+  //   background: darken(#93c47d, 20%);
+  // }
+  // &--weekly:hover > div {
+  //   background: darken(#6fa8dc, 20%);
+  // }
 }
 .content-header {
   display: flex;
   align-items: center;
   &--daily {
-    background: #93c47d;
+    background: rgb(106 168 79 / 30%);
+    background: rgba(106, 168, 79, 0.3);
   }
   &--weekly {
-    background: #6fa8dc;
+    background: rgb(61 133 198 / 30%);
+    background: rgba(61, 133, 198, 0.3);
   }
 }
 .content-icon {
@@ -258,7 +281,7 @@ export default {
 }
 .char-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
