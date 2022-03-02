@@ -231,6 +231,7 @@ export default {
 <style lang="scss" scoped>
 .character-grid {
   display: grid;
+  grid-template-rows: 45px repeat(auto-fill, 30px);
 }
 .row-wrapper {
   display: contents;
@@ -252,8 +253,8 @@ export default {
   }
 }
 .content-icon {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
 }
 .char-header {
   display: flex;
@@ -302,6 +303,14 @@ export default {
 .character-grid .v-label {
   display: none !important;
   width: 0 !important;
+}
+.character-grid {
+  .v-selection-control__wrapper, .v-checkbox .v-selection-control {
+    height: 30px !important;
+  }
+  .v-icon--size-default {
+    font-size: 1.3em !important;
+  }
 }
 
 .v-selection-control {

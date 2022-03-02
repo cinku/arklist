@@ -41,4 +41,7 @@ export default {
   min-height: 100vh;
   height: 100%;
 }
+.v-footer {
+  flex: 0 0 auto !important;
+}
 </style>
