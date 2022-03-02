@@ -323,6 +323,11 @@ export default {
 </style>
 
 <style lang="scss">
+.v-theme--light {
+  .char-header {
+    background: var(--v-theme-background);
+  }
+}
 .character-grid .v-label {
   display: none !important;
   width: 0 !important;
