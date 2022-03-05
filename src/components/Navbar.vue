@@ -4,6 +4,7 @@
 
     <v-spacer></v-spacer>
 
+    <add-content />
     <add-character />
 
     <v-btn
@@ -20,10 +21,12 @@
 
 <script>
 import AddCharacter from './AddCharacter.vue';
+import AddContent from './AddContent.vue';
 
 export default {
   components: {
     AddCharacter,
+    AddContent,
   },
   methods: {
     toggleTheme() {

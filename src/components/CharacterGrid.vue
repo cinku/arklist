@@ -48,6 +48,30 @@
           </div>
         </div>
       </template>
+      <template v-for="element in contentStore.custom.daily" :key="element">
+        <div class="content-header content-header--daily content-header--custom px-5">
+          {{ element }}
+          <v-icon
+            size="small"
+            icon="mdi-close-thick"
+            color="error"
+            class="remove-custom-content-button"
+            @click="removeCustomContent(element, 'daily')"
+          >
+          </v-icon>
+        </div>
+        <div class="row-wrapper row-wrapper--daily">
+          <div v-for="char in characters" :key="char.name">
+            <v-checkbox
+              v-model="char.daily"
+              color="success"
+              :value="'custom-' + element"
+              hide-details
+              @click="characterStore.toggleContent(char.name, 'daily', 'custom-' + element)"
+            />
+          </div>
+        </div>
+      </template>
       <div class="full-row full-row--daily">DAILY ACCOUNT</div>
       <template v-for="element in dailyAccount" :key="element">
         <div class="content-header content-header--daily px-5">
@@ -110,6 +134,30 @@
           />
         </div>
       </div>
+      <template v-for="element in contentStore.custom.dailyAccount" :key="element">
+        <div class="content-header content-header--daily content-header--custom px-5">
+          {{ element }}
+          <v-icon
+            size="small"
+            icon="mdi-close-thick"
+            color="error"
+            class="remove-custom-content-button"
+            @click="removeCustomContent(element, 'dailyAccount')"
+          >
+          </v-icon>
+        </div>
+        <div class="row-wrapper row-wrapper--daily">
+          <div class="affinity-row d-flex justify-center">
+            <v-checkbox
+              v-model="characterStore.account.daily"
+              color="success"
+              :value="'custom-' + element"
+              hide-details
+              @click="characterStore.toggleAccountContent('daily', 'custom-' + element)"
+            />
+          </div>
+        </div>
+      </template>
       <div class="full-row full-row--weekly">WEEKLY</div>
       <template v-for="element in weekly" :key="element">
         <div class="content-header content-header--weekly px-5">
@@ -125,6 +173,32 @@
               hide-details
               @click="
                 characterStore.toggleContent(char.name, 'weekly', element)
+              "
+            />
+          </div>
+        </div>
+      </template>
+      <template v-for="element in contentStore.custom.weekly" :key="element">
+        <div class="content-header content-header--weekly content-header--custom px-5">
+          {{ element }}
+          <v-icon
+            size="small"
+            icon="mdi-close-thick"
+            color="error"
+            class="remove-custom-content-button"
+            @click="removeCustomContent(element, 'weekly')"
+          >
+          </v-icon>
+        </div>
+        <div class="row-wrapper row-wrapper--weekly">
+          <div v-for="char in characters" :key="char.name">
+            <v-checkbox
+              v-model="char.weekly"
+              color="info"
+              :value="'custom-' + element"
+              hide-details
+              @click="
+                characterStore.toggleContent(char.name, 'weekly', 'custom-' + element)
               "
             />
           </div>
@@ -148,12 +222,37 @@
           </div>
         </div>
       </template>
+      <template v-for="element in contentStore.custom.weeklyAccount" :key="element">
+        <div class="content-header content-header--weekly content-header--custom px-5">
+          {{ element }}
+          <v-icon
+            size="small"
+            icon="mdi-close-thick"
+            color="error"
+            class="remove-custom-content-button"
+            @click="removeCustomContent(element, 'weeklyAccount')"
+          >
+          </v-icon>
+        </div>
+        <div class="row-wrapper row-wrapper--weekly">
+          <div class="affinity-row d-flex justify-center">
+            <v-checkbox
+              v-model="characterStore.account.weekly"
+              color="info"
+              :value="'custom-' + element"
+              hide-details
+              @click="characterStore.toggleAccountContent('weekly', 'custom-' + element)"
+            />
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { useCharacterStore } from "../store/character";
+import { useContentStore } from "../store/content";
 import ResetDaily from './ResetDaily.vue';
 import ResetWeekly from './ResetWeekly.vue';
 
@@ -196,15 +295,13 @@ export default {
   }),
   setup() {
     const characterStore = useCharacterStore();
-    return { characterStore };
+    const contentStore = useContentStore();
+    return { characterStore, contentStore };
   },
   methods: {
     getIcon(element) {
       const name = element.split("-")[0];
       return new URL(`../assets/${name}.png`, import.meta.url);
-    },
-    dailyToggle(charName, content) {
-      this.characterStore.toggleDaily(charName, content);
     },
     getContentName(content) {
       if (content.indexOf("-") !== -1) {
@@ -216,6 +313,10 @@ export default {
         return `${map[content]}`;
       }
     },
+    removeCustomContent(content, type) {
+      this.contentStore.removeCustomContent(content, type);
+      this.characterStore.removeCustomContent('custom-' + content, type);
+    }
   },
   computed: {
     characters() {
@@ -274,6 +375,9 @@ export default {
     background: rgb(61 133 198 / 30%);
     background: rgba(61, 133, 198, 0.3);
   }
+  &--custom {
+    justify-content: space-between;
+  }
 }
 .content-icon {
   width: 24px;
@@ -302,6 +406,9 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+  cursor: pointer;
+}
+.remove-custom-content-button {
   cursor: pointer;
 }
 .full-row {

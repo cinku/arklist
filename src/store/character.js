@@ -33,10 +33,24 @@ export const useCharacterStore = defineStore("characters", {
         this.account[type].push(content);
       }
     },
+    removeCustomContent(content, type) {
+      if (type.includes('Account')) {
+        const accountContent = type.replace('Account', '');
+        if (this.account[accountContent].filter(c => c === content)) {
+          this.account[accountContent] = this.account[accountContent].filter(c => c !== content);
+        }
+      } else {
+        this.chars = this.chars.map(char => {
+          if (char[type].filter(c => c === content)) {
+            char[type] = char[type].filter(c => c !== content);
+          }
+          return char;
+        });
+      }
+    },
     addCharacter(charName) {
       this.chars.push({
         name: charName,
-        class: "Gunslinger",
         daily: [],
         weekly: [],
       });
