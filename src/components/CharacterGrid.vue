@@ -13,7 +13,7 @@
   <div v-else class="d-flex justify-center">
     <div
       class="character-grid"
-      :style="{ gridTemplateColumns: '200px ' + gridSize }"
+      :style="{ gridTemplateColumns: '200px ' + gridSize, overflowX: windowWidth < ((charactersNumber * 200) + 200) ? 'scroll' : 'none' }"
     >
       <div class="d-flex justify-center align-center">
         <reset-daily v-if="characterStore.chars.length > 0" />
@@ -251,6 +251,7 @@
 </template>
 
 <script>
+import { useWindowSize } from 'vue-window-size';
 import { useCharacterStore } from "../store/character";
 import { useContentStore } from "../store/content";
 import ResetDaily from './ResetDaily.vue';
@@ -296,7 +297,8 @@ export default {
   setup() {
     const characterStore = useCharacterStore();
     const contentStore = useContentStore();
-    return { characterStore, contentStore };
+    const { width } = useWindowSize();
+    return { characterStore, contentStore, windowWidth: width };
   },
   methods: {
     getIcon(element) {
