@@ -15,12 +15,13 @@
       class="character-grid"
       :style="{ gridTemplateColumns: '200px ' + gridSize, overflowX: windowWidth < ((charactersNumber * 200) + 200) ? 'scroll' : 'none' }"
     >
-      <div class="d-flex justify-center align-center">
-        <reset-daily v-if="characterStore.chars.length > 0" />
-        <reset-weekly v-if="characterStore.chars.length > 0" />
+      <div class="d-flex justify-center align-center" v-if="characterStore.chars.length > 0">
+        <reset-daily />
+        <reset-weekly />
+        <grid-options v-if="characterStore.chars.length > 4" />
       </div>
       <div class="char-header" v-for="char in characters" :key="char.name">
-        <span class="char-name" :title="char.name">{{ char.name }}</span>
+        <span class="char-name" :style="{ maxWidth: gridStore.size + 'px'}" :title="char.name">{{ char.name }}</span>
         <v-icon
           size="small"
           icon="mdi-close-octagon"
@@ -252,10 +253,12 @@
 
 <script>
 import { useWindowSize } from 'vue-window-size';
-import { useCharacterStore } from "../store/character";
-import { useContentStore } from "../store/content";
+import { useCharacterStore } from '../store/character';
+import { useContentStore } from '../store/content';
+import { useGridStore } from '../store/grid';
 import ResetDaily from './ResetDaily.vue';
 import ResetWeekly from './ResetWeekly.vue';
+import GridOptions from './GridOptions.vue';
 
 const map = {
   unad: "Una Daily",
@@ -276,6 +279,7 @@ export default {
   components: {
     ResetDaily,
     ResetWeekly,
+    GridOptions,
   },
   data: () => ({
     daily: [
@@ -298,7 +302,8 @@ export default {
     const characterStore = useCharacterStore();
     const contentStore = useContentStore();
     const { width } = useWindowSize();
-    return { characterStore, contentStore, windowWidth: width };
+    const gridStore = useGridStore();
+    return { characterStore, contentStore, windowWidth: width, gridStore };
   },
   methods: {
     getIcon(element) {
@@ -329,11 +334,12 @@ export default {
     },
     gridSize() {
       const charNumber = this.characterStore.chars.length;
+      const columnSize = charNumber > 4 ? this.gridStore.size : 200;
       if (charNumber < 3) {
         const size = 3 - (charNumber % 3);
         return `repeat(${charNumber}, ${size * 200}px)`;
       } else {
-        return `repeat(${charNumber}, 200px)`;
+        return `repeat(${charNumber}, ${columnSize}px)`;
       }
     },
   },

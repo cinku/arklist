@@ -1,5 +1,5 @@
 <template>
-  <v-btn size="small" class="mr-1 ml-1" color="warning" variant="outlined" @click="characterStore.resetWeekly">
+  <v-btn size="x-small" class="mr-1 ml-1" color="warning" variant="outlined" @click="characterStore.resetWeekly">
     <v-icon left icon="mdi-refresh"></v-icon>
     <span>Weekly</span>
   </v-btn>
